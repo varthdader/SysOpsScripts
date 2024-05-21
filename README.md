@@ -1,4 +1,4 @@
-# .-=[ SysOpsScripts ]=-.
+# SysOpsScripts
 
 ## Description:
 SysOpsScripts is a comprehensive collection of scripts designed to streamline and automate various system management tasks across different platforms. From server provisioning to performance monitoring, this repository houses a wide array of scripts written in various scripting languages like Bash, Python, and PowerShell, catering to diverse system environments.
