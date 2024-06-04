@@ -37,10 +37,12 @@ while IFS= read -r line; do
 
 # Add the hostname to /etc/hosts
   echo "Adding $hostname to /etc/hosts"
-  echo "$ipaddress\t$hostname" >> /etc/hosts
+  echo "$ipaddress   $hostname" >> /etc/hosts
 done < target.hosts.txt
 
 # Zero out the list to avoid duplicates
 echo "" > target.hosts.txt
 
-## Tip: Try to run this as a cron job to allow it to update in the background
+## Tip: Quickly add your hostnames like so 
+##         echo "1.1.1.1 random.hostname" >> target.hosts.txt
+## Tip2: Try to run this as a cron job to allow it to update in the background
