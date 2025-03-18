@@ -46,3 +46,10 @@ try {
     Write-Host "Failed to update password in SQL Server: $_"
     exit 1
 }
+
+<#
+- Replace the placeholders (`DOMAIN\ServiceAccount`, `NewP@ssword123!`, `YourSqlServerInstance`, `YourDatabaseName`) with your actual values.
+- Ensure that the `Active Directory` module is installed and you have the necessary permissions to change the password.
+- Modify the SQL update query according to your database schema.
+- It's a good practice to securely handle passwords and sensitive information.
+#>
