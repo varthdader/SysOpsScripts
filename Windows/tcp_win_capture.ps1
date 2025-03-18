@@ -16,7 +16,7 @@ Start-Sleep 90 # Increase this value to capture more than 90 seconds
 netsh trace stop
 Compress-Archive -Path "c:\\windows\\temp\\capture.etl" -DestinationPath "c:\\windows\\temp\\capture.zip" -Force
 Write-Host -Fore Red "------------------------------------------------------"
-Write-Host -Fore Green "       Capture File Saved To: C:\Windows\Temp\capture.etl"
+Write-Host -Fore Green "       Capture File Saved To: C:\Windows\Temp\capture.etl & c:\\windows\\temp\\capture.zip"
 Write-Host -Fore Red "------------------------------------------------------"
 
 #<# 2 Convert from .etl to .pcap
