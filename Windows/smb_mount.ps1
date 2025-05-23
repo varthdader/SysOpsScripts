@@ -1,6 +1,7 @@
 <#  Script Name: smb_mount.ps1
 Script to mount an SMB shared volume with a user and password.
 The password is called from a flat file and converted to a secure string before being stored into memory.
+Author: VarthDader (https://github.com/varthdader)
 #>
 
 # Mandatory Banner
