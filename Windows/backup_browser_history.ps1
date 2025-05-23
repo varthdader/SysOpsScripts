@@ -1,4 +1,7 @@
-# PowerShell script to replace the username in paths, then compress the modified path to a zip file.
+<# Script: backup_browser_history.ps1
+A PowerShell script to replace the username in paths, then compress the modified path to a zip file.
+Author: VarthDader (https://github.com/varthdader)
+#>
 
 # Prompt for the username
 $Username = Read-Host "Enter the username"
