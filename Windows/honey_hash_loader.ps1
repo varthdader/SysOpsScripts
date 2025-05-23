@@ -1,4 +1,4 @@
-<# Script: svc_account_recred.ps1
+<# Script: honey_hash_loader.ps1
 A PowerShell script loads a named users password hash into the memory of the local host. 
 This should be run as a GPO upon boot for all critical servers.
 
