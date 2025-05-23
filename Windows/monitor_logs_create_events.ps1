@@ -1,12 +1,7 @@
-###
-#  __         ______     ______        __    __     ______     __   __     __     ______   ______     ______    
-# /\ \       /\  __ \   /\  ___\      /\ "-./  \   /\  __ \   /\ "-.\ \   /\ \   /\__  _\ /\  __ \   /\  == \   
-# \ \ \____  \ \ \/\ \  \ \ \__ \     \ \ \-./\ \  \ \ \/\ \  \ \ \-.  \  \ \ \  \/_/\ \/ \ \ \/\ \  \ \  __<   
-#  \ \_____\  \ \_____\  \ \_____\     \ \_\ \ \_\  \ \_____\  \ \_\\"\_\  \ \_\    \ \_\  \ \_____\  \ \_\ \_\ 
-#  \/_____/   \/_____/   \/_____/      \/_/  \/_/   \/_____/   \/_/ \/_/   \/_/     \/_/   \/_____/   \/_/ /_/ 
-
-## Example: We monitor a flat log for for "Login Failed" events and report those to the local system logs                                                                                                            
-##
+<# Script: monitor_logs_create_events.ps1
+A PowerShell script to monitor a flat log for for "Login Failed" events and report those to the local system logs.
+Author: VarthDader (https://github.com/varthdader)
+#>
 
 # Define the path to the log files
 # Define the path to the log files
