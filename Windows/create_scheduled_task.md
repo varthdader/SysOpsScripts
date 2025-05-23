@@ -4,8 +4,6 @@ To set up the PowerShell script as a scheduled task on a remote host named BEEFY
 Prerequisites
 Remote Management: Ensure that PowerShell Remoting is enabled on BEEFY1. You can enable it by running the following command in an elevated PowerShell session on BEEFY1:
 
-powershell
-
 ```
 Enable-PSRemoting -Force
 ```
@@ -16,7 +14,6 @@ Copy the Script to the Remote Host:
 Use Copy-Item to transfer the script to the remote machine. Replace C:\Path\To\YourScript.ps1 with the actual path of your script.
 
 ```
-powershell
 Copy-Item -Path "C:\Path\To\YourScript.ps1" -Destination "\\BEEFY1\C$\Path\To\YourScript.ps1"
 ```
 Create the Scheduled Task:
