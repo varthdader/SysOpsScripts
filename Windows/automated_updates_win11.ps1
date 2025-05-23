@@ -1,5 +1,7 @@
-# PowerShell script to automate Windows 11 updates
-## Author: VarthDader (https://github.com/varthdader)
+<# Script: automated_updates_win11.ps1
+A PowerShell script to automate Windows 11 updates
+Author: VarthDader (https://github.com/varthdader)
+#>
 
 # Function to check for updates
 function Check-ForUpdates {
