@@ -26,3 +26,9 @@ Write-Host -Fore Red "------------------------------------------------------"
 #
 ##>
 #./etl2pcapng.exe C:\Windows\Temp\capture.etl C:\Windows\Temp\capture.pcap
+
+## Additional Note:
+## We can enumerate cached DNS names from command line also
+### ipconfig /displaydns
+##  Or from powershell
+### Get-DnsClientCache
