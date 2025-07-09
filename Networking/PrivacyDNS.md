@@ -1,22 +1,55 @@
-Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and using No-IP's enhanced DNS service, ensuring Unbound uses the No-IP service for DNS resolution.
+Creating a user for running Docker containers and running the No-IP DUC in a screen session.
 
 ### Prerequisites
 
 1. **Ubuntu Server**: Ensure you have an Ubuntu server running.
 2. **Docker Installed**: Make sure Docker and Docker Compose are installed.
+3. **Screen Installed**: Install the `screen` utility if it’s not already available:
 
-### Step 1: Create a No-IP Account
+   ```bash
+   sudo apt install screen
+   ```
 
-1. Go to [No-IP.com](https://www.noip.com) and create a free account.
+### Step 1: Create a User for Docker
+
+1. **Create a New User**:
+
+   Replace `dockeruser` with your desired username:
+
+   ```bash
+   sudo adduser dockeruser
+   ```
+
+   Follow the prompts to set a password and fill in user details.
+
+2. **Add User to Docker Group**:
+
+   This allows the user to run Docker commands without sudo:
+
+   ```bash
+   sudo usermod -aG docker dockeruser
+   ```
+
+3. **Switch to the New User**:
+
+   Log in as the new user:
+
+   ```bash
+   su - dockeruser
+   ```
+
+### Step 2: Create a No-IP Account
+
+1. Go to [No-IP.com] and create a free account.
 2. Set up a hostname through their dashboard.
 
-### Step 2: Install the Dynamic Update Client (DUC)
+### Step 3: Install the Dynamic Update Client (DUC)
 
 1. **Download the DUC**:
 
-   Open a terminal and run the following command:
+   Open a terminal and run:
 
-   ```
+   ```bash
    wget --content-disposition https://www.noip.com/download/linux/latest
    ```
 
@@ -25,14 +58,21 @@ Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and usin
    Change to the directory where the DUC was downloaded and install it:
 
    ```bash
-   tar xf noip-duc_3.3.0.tar.gz
    cd /home/$USER/noip-duc_3.3.0/binaries
    sudo apt install ./noip-duc_3.3.0_amd64.deb
    ```
 
-### Step 3: Configure DUC
+### Step 4: Configure DUC in a Screen Session
 
-1. **Run the DUC**:
+1. **Start a Screen Session**:
+
+   Run the following command to start a screen session:
+
+   ```bash
+   screen -S noip
+   ```
+
+2. **Run the DUC**:
 
    Start the No-IP DUC:
 
@@ -40,7 +80,7 @@ Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and usin
    noip-duc
    ```
 
-2. **Explore Options**:
+3. **Explore Options**:
 
    To see available commands and options, run:
 
@@ -48,7 +88,7 @@ Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and usin
    noip-duc --help
    ```
 
-3. **Login with DDNS Keys**:
+4. **Login with DDNS Keys**:
 
    To send updates using your DDNS keys, enter:
 
@@ -58,7 +98,11 @@ Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and usin
 
    Replace `<DDNS Key Username>` and `<DDNS Key Password>` with your actual credentials.
 
-### Step 4: Create a Docker Network
+5. **Detach from the Screen Session**:
+
+   Press `Ctrl + A`, then `D` to detach from the screen session while keeping it running in the background.
+
+### Step 5: Create a Docker Network
 
 Create a network for the containers to communicate:
 
@@ -66,7 +110,7 @@ Create a network for the containers to communicate:
 docker network create pihole_network
 ```
 
-### Step 5: Set Up Unbound
+### Step 6: Set Up Unbound
 
 1. **Create Unbound Directory**:
 
@@ -111,7 +155,7 @@ docker network create pihole_network
        nlnetlabs/unbound:latest
    ```
 
-### Step 6: Set Up Pi-hole
+### Step 7: Set Up Pi-hole
 
 1. **Create Pi-hole Directory**:
 
@@ -169,7 +213,7 @@ docker network create pihole_network
    docker-compose up -d
    ```
 
-### Step 7: Configure Pi-hole to Use Unbound
+### Step 8: Configure Pi-hole to Use Unbound
 
 1. **Access the Pi-hole Admin Interface**:
 
@@ -179,7 +223,7 @@ docker network create pihole_network
 
    Go to **Settings** > **DNS** and ensure "Custom 1 (IPv4)" is set to `127.0.0.1#5335`.
 
-### Step 8: Test Configuration
+### Step 9: Test Configuration
 
 1. **Check No-IP Status**:
 
@@ -199,4 +243,4 @@ docker network create pihole_network
 
 ### Conclusion
 
-You've successfully set up No-IP's enhanced DNS service along with Pi-hole and Unbound, ensuring that Unbound uses your No-IP hostname for DNS resolution. Adjust any configurations as needed based on your network requirements!
+You've successfully set up No-IP's enhanced DNS service along with Pi-hole and Unbound, ensuring that Unbound uses your No-IP hostname for DNS resolution. You've also created a dedicated user for running Docker containers and configured the No-IP DUC to run in a screen session. Adjust any configurations as needed based on your network requirements!
