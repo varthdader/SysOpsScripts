@@ -1,24 +1,63 @@
-A step-by-step guide to install Pi-hole and Unbound as Docker containers on an Ubuntu server, and configure Pi-hole to resolve DNS requests through Unbound.
+Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and using No-IP's enhanced DNS service, ensuring Unbound uses the No-IP service for DNS resolution.
 
 ### Prerequisites
 
 1. **Ubuntu Server**: Ensure you have an Ubuntu server running.
-2. **Docker Installed**: Make sure Docker and Docker Compose are installed. Install Docker if not already done:
+2. **Docker Installed**: Make sure Docker and Docker Compose are installed.
+
+### Step 1: Create a No-IP Account
+
+1. Go to [No-IP.com](https://www.noip.com) and create a free account.
+2. Set up a hostname through their dashboard.
+
+### Step 2: Install the Dynamic Update Client (DUC)
+
+1. **Download the DUC**:
+
+   Open a terminal and run the following command:
 
    ```bash
-   sudo apt update
-   sudo apt install -y docker.io docker-compose
+   wget --content-disposition https://www.noip.com/download/linux/latest
    ```
 
-3. **Set Up Docker Permissions**: To run Docker without `sudo`, add your user to the Docker group:
+2. **Extract and Install**:
+
+   Change to the directory where the DUC was downloaded and install it:
 
    ```bash
-   sudo usermod -aG docker $USER
+   cd /home/$USER/noip-duc_3.3.0/binaries
+   sudo apt install ./noip-duc_3.3.0_amd64.deb
    ```
 
-   Log out and back in, or reboot the server.
+### Step 3: Configure DUC
 
-### Step 1: Create a Docker Network
+1. **Run the DUC**:
+
+   Start the No-IP DUC:
+
+   ```bash
+   noip-duc
+   ```
+
+2. **Explore Options**:
+
+   To see available commands and options, run:
+
+   ```bash
+   noip-duc --help
+   ```
+
+3. **Login with DDNS Keys**:
+
+   To send updates using your DDNS keys, enter:
+
+   ```bash
+   noip-duc -g all.ddnskey.com --username <DDNS Key Username> --password <DDNS Key Password>
+   ```
+
+   Replace `<DDNS Key Username>` and `<DDNS Key Password>` with your actual credentials.
+
+### Step 4: Create a Docker Network
 
 Create a network for the containers to communicate:
 
@@ -26,7 +65,7 @@ Create a network for the containers to communicate:
 docker network create pihole_network
 ```
 
-### Step 2: Set Up Unbound
+### Step 5: Set Up Unbound
 
 1. **Create Unbound Directory**:
 
@@ -42,7 +81,7 @@ docker network create pihole_network
    nano ~/unbound/unbound.conf
    ```
 
-   Add the following configuration:
+   Add the following configuration, including No-IP's DNS:
 
    ```plaintext
    server:
@@ -54,8 +93,7 @@ docker network create pihole_network
        prefetch: yes
        forward-zone:
            name: "."
-           forward-addr: 1.1.1.1  # Cloudflare DNS
-           forward-addr: 8.8.8.8   # Google DNS
+           forward-addr: <your-hostname>.no-ip.org  # Use your No-IP hostname
    ```
 
 3. **Pull and Run Unbound Container**:
@@ -72,7 +110,7 @@ docker network create pihole_network
        nlnetlabs/unbound:latest
    ```
 
-### Step 3: Set Up Pi-hole
+### Step 6: Set Up Pi-hole
 
 1. **Create Pi-hole Directory**:
 
@@ -118,25 +156,41 @@ docker network create pihole_network
 
 3. **Start Pi-hole**:
 
-   Navigate to the Pi-hole directory and start the container:
+   Navigate to the Pi-hole directory:
 
    ```bash
    cd ~/pihole
+   ```
+
+   Start the container:
+
+   ```bash
    docker-compose up -d
    ```
 
-### Step 4: Configure Pi-hole to Use Unbound
+### Step 7: Configure Pi-hole to Use Unbound
 
-Pi-hole should already be configured to use Unbound as its DNS resolver through the Docker Compose setup. To verify:
+1. **Access the Pi-hole Admin Interface**:
 
-1. Access the Pi-hole admin interface by navigating to `http://<YOUR_SERVER_IP>/admin`.
-2. Log in with the password you set.
-3. Go to **Settings** > **DNS** and ensure that "Custom 1 (IPv4)" is set to `127.0.0.1#5335`.
+   Navigate to `http://<YOUR_SERVER_IP>/admin` and log in.
 
-### Step 5: Test the Configuration
+2. **Verify DNS Settings**:
 
-1. Use a device connected to your network and set its DNS to the IP address of your Ubuntu server.
-2. Test DNS resolution using a command line:
+   Go to **Settings** > **DNS** and ensure "Custom 1 (IPv4)" is set to `127.0.0.1#5335`.
+
+### Step 8: Test Configuration
+
+1. **Check No-IP Status**:
+
+   Ensure your No-IP hostname is resolving correctly:
+
+   ```bash
+   nslookup <your-hostname>.no-ip.org
+   ```
+
+2. **Test DNS Resolution**:
+
+   From a connected device, run:
 
    ```bash
    nslookup google.com <YOUR_SERVER_IP>
@@ -144,4 +198,4 @@ Pi-hole should already be configured to use Unbound as its DNS resolver through 
 
 ### Conclusion
 
-You now have a Pi-hole and Unbound setup running as Docker containers on your Ubuntu server! Adjust configurations as needed for your specific environment.
+You've successfully set up No-IP's enhanced DNS service along with Pi-hole and Unbound, ensuring that Unbound uses your No-IP hostname for DNS resolution. Adjust any configurations as needed based on your network requirements!
