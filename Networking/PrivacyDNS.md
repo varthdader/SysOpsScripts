@@ -16,17 +16,16 @@ Here's a comprehensive guide that includes setting up Pi-hole, Unbound, and usin
 
    Open a terminal and run the following command:
 
-   ```bash
-wget --content-disposition https://www.noip.com/download/linux/latest
-```
+   ```
+   wget --content-disposition https://www.noip.com/download/linux/latest
+   ```
 
 2. **Extract and Install**:
 
    Change to the directory where the DUC was downloaded and install it:
 
    ```bash
-
-tar xf noip-duc_3.3.0.tar.gz
+   tar xf noip-duc_3.3.0.tar.gz
    cd /home/$USER/noip-duc_3.3.0/binaries
    sudo apt install ./noip-duc_3.3.0_amd64.deb
    ```
