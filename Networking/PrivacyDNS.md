@@ -244,3 +244,89 @@ docker network create pihole_network
 ### Conclusion
 
 You've successfully set up No-IP's enhanced DNS service along with Pi-hole and Unbound, ensuring that Unbound uses your No-IP hostname for DNS resolution. You've also created a dedicated user for running Docker containers and configured the No-IP DUC to run in a screen session. Adjust any configurations as needed based on your network requirements!
+
+
+To automate the process of starting the No-IP Dynamic Update Client (DUC) in a screen session after booting your server, you can create a script and set it to run at startup. Here’s how to do it:
+
+### Step 1: Create the Script
+
+1. **Create a Script File**:
+
+   Open a terminal and create a new script file, e.g., `start_noip_duc.sh`:
+
+   ```bash
+   nano ~/start_noip_duc.sh
+   ```
+
+2. **Add the Following Script**:
+
+   Add the following content to the script:
+
+   ```bash
+   #!/bin/bash
+   # Start No-IP DUC in a screen session
+
+   # Create a new screen session named "noip" if it doesn't exist
+   if ! screen -list | grep -q "noip"; then
+       screen -dmS noip noip-duc -g all.ddnskey.com --username <DDNS Key Username> --password <DDNS Key Password>
+   fi
+   ```
+
+   Replace `<DDNS Key Username>` and `<DDNS Key Password>` with your actual credentials.
+
+3. **Make the Script Executable**:
+
+   Save the file and exit the editor. Then, make the script executable:
+
+   ```bash
+   chmod +x ~/start_noip_duc.sh
+   ```
+
+### Step 2: Set Up the Script to Run on Startup
+
+You can use `cron` to run the script at startup:
+
+1. **Edit the Crontab**:
+
+   Open the crontab for the current user:
+
+   ```bash
+   crontab -e
+   ```
+
+2. **Add the Following Line**:
+
+   At the end of the file, add the following line to run the script at reboot:
+
+   ```bash
+   @reboot /bin/bash /home/dockeruser/start_noip_duc.sh
+   ```
+
+   Replace `dockeruser` with your actual username if different.
+
+3. **Save and Exit**:
+
+   Save the changes and exit the editor.
+
+### Step 3: Reboot and Test
+
+1. **Reboot Your Server**:
+
+   ```bash
+   sudo reboot
+   ```
+
+2. **Check if the Screen Session is Running**:
+
+   After rebooting, check if the No-IP DUC is running in a screen session:
+
+   ```bash
+   screen -list
+   ```
+
+   You should see a session named `noip`.
+
+### Conclusion
+
+With this setup, your No-IP DUC will automatically start in a screen session every time your server boots. This ensures that your dynamic DNS updates are always running without manual intervention.
+
