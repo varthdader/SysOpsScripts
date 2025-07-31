@@ -69,17 +69,18 @@ with open(markdown_file, 'w') as md_file, open(html_file, 'w') as html_file:
 
         mail = mailparser.parse_from_file(file_path)
 
-        # Section 1: Addresses
+        # Section 1: Addresses and Subject
         addresses_content = (
             f"Sender: {mail.from_}\n"
             f"To: {mail.to}\n"
+            f"Subject: {mail.subject}\n"
             f"Cc: {mail.cc}\n"
             f"Bcc: {mail.bcc}\n"
             f"Reply-To: {mail.reply_to}\n"
         )
-        section_md = create_section("ADDRESSES", addresses_content)
+        section_md = create_section("ADDRESSES & SUBJECT", addresses_content)
         md_file.write(section_md)
-        html_file.write(f"<h3>ADDRESSES</h3><pre>{addresses_content}</pre>")
+        html_file.write(f"<h3>ADDRESSES & SUBJECT</h3><pre>{addresses_content}</pre>")
 
         # Section 2: Security - Extract DMARC, DKIM, and SPF results from headers
         auth_results = mail.headers.get('Authentication-Results', '')
@@ -114,7 +115,7 @@ with open(markdown_file, 'w') as md_file, open(html_file, 'w') as html_file:
                 decoded_payload = base64.b64decode(attachment['payload'])
                 attachment_md5 = calculate_md5(decoded_payload)
                 vt_link = f"https://www.virustotal.com/gui/home/search/{attachment_md5}"
-                artifacts_content += f"- {attachment['filename']}: <a href='{vt_link}' target='_blank'>MD5: {attachment_md5}</a>\n"
+                artifacts_content += f"- {attachment['filename']}: MD5: {attachment_md5} (Copy/Paste URL: {vt_link})\n"
 
         section_md = create_section("ARTIFACTS", artifacts_content)
         md_file.write(section_md)
