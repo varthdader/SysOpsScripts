@@ -6,6 +6,7 @@ import string
 from datetime import datetime
 from urllib.parse import unquote
 from html import unescape
+import hashlib
 
 # URLDefenseDecoder class to handle URL decoding
 class URLDefenseDecoder(object):
@@ -97,6 +98,12 @@ class URLDefenseDecoder(object):
         else:
             raise ValueError('Error parsing URL')
 
+# Function to calculate MD5 checksum
+def calculate_md5(base64_string):
+    decoded_bytes = base64.b64decode(base64_string)
+    md5_hash = hashlib.md5(decoded_bytes).hexdigest()
+    return md5_hash
+
 # Main processing script
 def main():
     output_html_file = f'C:\\Temp\\PHISH_REPORT_{datetime.now().strftime("%Y%m%d_%H%M%S")}.html'
@@ -109,7 +116,7 @@ def main():
             <title>YAEA</title>
             <style>
                 body {
-                    background-color: #f0f0f0; /* Light grey background */
+                    background-color: #FFFFFF; /* White background */
                     color: black; /* Black text */
                     font-family: Arial, sans-serif;
                     white-space: pre-wrap;
@@ -133,7 +140,7 @@ def main():
                     border-radius: 5px;
                 }
                 .separator {
-                    border-top: 2px solid #000; /* Black separator line */
+                    border-top: 4px solid #000; /* Bold black separator line */
                     margin: 20px 0; /* Space above and below */
                 }
             </style>
@@ -208,12 +215,25 @@ def main():
             html_file.write(f"<h3>HOPS</h3>")
             html_file.write(f"<pre>{hops_section}</pre>")
 
-            # Section 6: OUTPUT
+            # Section 6: ATTACHMENTS
+            if mail.attachments:
+                html_file.write(f"<h3>ATTACHMENTS</h3>")
+                for attachment in mail.attachments:
+                    file_name = attachment['filename']
+                    base64_content = attachment['payload']  # Assuming this is the base64 content
+                    md5_checksum = calculate_md5(base64_content)
+                    html_file.write(f"File Name: {file_name}\n")
+                    html_file.write(f"MD5 Checksum: {md5_checksum}\n\n")
+            else:
+                html_file.write(f"<h3>ATTACHMENTS</h3>")
+                html_file.write(f"No attachments found.\n")
+
+            # Section 7: OUTPUT
             output_content = "\n".join(f"{key}: {value}" for key, value in mail.headers.items())
             html_file.write(f"<h3>OUTPUT</h3>")
             html_file.write(f"<pre>{output_content}</pre>")
 
-            # Separator between emails
+            # Prominent separator between emails
             html_file.write("<div class='separator'></div>")
 
         # Write HTML footer
