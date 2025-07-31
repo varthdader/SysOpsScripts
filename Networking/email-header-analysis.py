@@ -132,17 +132,11 @@ def main():
                     padding: 10px;
                     border-radius: 5px;
                 }
-                .output {
-                    display: none; /* Hidden by default */
-                    margin-top: 10px;
+                .separator {
+                    border-top: 2px solid #000; /* Black separator line */
+                    margin: 20px 0; /* Space above and below */
                 }
             </style>
-            <script>
-                function toggleOutput(id) {
-                    var output = document.getElementById(id);
-                    output.style.display = (output.style.display === "none" || output.style.display === "") ? "block" : "none";
-                }
-            </script>
         </head>
         <body>
             <h1>Yet Another Email Analyzer</h1>
@@ -216,16 +210,18 @@ def main():
 
             # Section 6: OUTPUT
             output_content = "\n".join(f"{key}: {value}" for key, value in mail.headers.items())
-            html_file.write(f"<h3 onclick=\"toggleOutput('output_{email_file}')\">OUTPUT</h3>")
-            html_file.write(f"<pre id='output_{email_file}' class='output'>{output_content}</pre>")
+            html_file.write(f"<h3>OUTPUT</h3>")
+            html_file.write(f"<pre>{output_content}</pre>")
+
+            # Separator between emails
+            html_file.write("<div class='separator'></div>")
 
         # Write HTML footer
         html_file.write("</body></html>")
 
     print(f"Report generated: {output_html_file}")
 
-# Fun fact: Octopuses have three hearts! 
-# They are fascinating creatures, and their blood is blue due to copper-based hemocyanin.
+# Fun fact: Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still edible!
 
 if __name__ == '__main__':
     main()
