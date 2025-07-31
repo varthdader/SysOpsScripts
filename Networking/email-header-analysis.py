@@ -1,6 +1,5 @@
 import mailparser
 import re
-import hashlib
 import glob
 import base64
 import string
@@ -117,10 +116,15 @@ def main():
                 }
                 h1 {
                     color: #00FF00; /* Bright green for main title */
+                    text-align: center; /* Center the main title */
+                    font-weight: bold; /* Bold title */
+                    text-decoration: underline; /* Underline title */
                 }
                 h2, h3 {
-                    color: red; /* Red for section headers */
+                    color: red; /* Bright red for section headers */
+                    text-align: center; /* Center the section headers */
                     cursor: pointer; /* Change cursor to pointer for headers */
+                    text-decoration: underline; /* Underline section headers */
                 }
                 pre {
                     background-color: #222; /* Dark background for preformatted text */
@@ -136,11 +140,7 @@ def main():
             <script>
                 function toggleOutput(id) {
                     var output = document.getElementById(id);
-                    if (output.style.display === "none") {
-                        output.style.display = "block";
-                    } else {
-                        output.style.display = "none";
-                    }
+                    output.style.display = (output.style.display === "none" || output.style.display === "") ? "block" : "none";
                 }
             </script>
         </head>
@@ -164,7 +164,8 @@ def main():
                 f"Bcc: {mail.bcc}\n"
                 f"Reply-To: {mail.reply_to}\n"
             )
-            html_file.write(f"<h3 onclick=\"toggleOutput('addresses_{email_file}')\">ADDRESSES & SUBJECT</h3><pre id='addresses_{email_file}' class='output'>{addresses_content}</pre>")
+            html_file.write(f"<h3>ADDRESSES & SUBJECT</h3>")
+            html_file.write(f"<pre>{addresses_content}</pre>")
 
             # Section 2: SECURITY
             auth_results = mail.headers.get('Authentication-Results', '')
@@ -180,7 +181,8 @@ def main():
                 f"DMARC: {dmarc_result}\n"
                 f"SPF: {spf_result}\n"
             )
-            html_file.write(f"<h3 onclick=\"toggleOutput('security_{email_file}')\">SECURITY</h3><pre id='security_{email_file}' class='output'>{security_content}</pre>")
+            html_file.write(f"<h3>SECURITY</h3>")
+            html_file.write(f"<pre>{security_content}</pre>")
 
             # Section 3: ARTIFACTS
             urls = re.findall(r'https://urldefense\.com/[^\s]+', mail.body)
@@ -194,12 +196,14 @@ def main():
                     html_file.write(f"<p>Error decoding URL: {e}</p>")
 
             if decoded_urls:
-                html_file.write(f"<h3 onclick=\"toggleOutput('decoded_urls_{email_file}')\">Decoded URLs</h3><pre id='decoded_urls_{email_file}' class='output'>{chr(10).join(decoded_urls)}</pre>")
+                html_file.write(f"<h3>Decoded URLs</h3>")
+                html_file.write(f"<pre>{chr(10).join(decoded_urls)}</pre>")
 
             # Section 4: BODY
             body_content = mail.body
             body_text = unescape(body_content)  # Convert HTML to text
-            html_file.write(f"<h3 onclick=\"toggleOutput('body_{email_file}')\">BODY</h3><pre id='body_{email_file}' class='output'>{body_text}</pre>")
+            html_file.write(f"<h3>BODY</h3>")
+            html_file.write(f"<pre>{body_text}</pre>")
 
             # Section 5: HOPS
             hops_content = []
@@ -207,16 +211,21 @@ def main():
                 hops_content.append(f"Hop{index}: {received_header.strip()}")
             
             hops_section = "\n".join(hops_content) if hops_content else "No hop information available."
-            html_file.write(f"<h3 onclick=\"toggleOutput('hops_{email_file}')\">HOPS</h3><pre id='hops_{email_file}' class='output'>{hops_section}</pre>")
+            html_file.write(f"<h3>HOPS</h3>")
+            html_file.write(f"<pre>{hops_section}</pre>")
 
             # Section 6: OUTPUT
             output_content = "\n".join(f"{key}: {value}" for key, value in mail.headers.items())
-            html_file.write(f"<h3 onclick=\"toggleOutput('output_{email_file}')\">OUTPUT</h3><pre id='output_{email_file}' class='output'>{output_content}</pre>")
+            html_file.write(f"<h3 onclick=\"toggleOutput('output_{email_file}')\">OUTPUT</h3>")
+            html_file.write(f"<pre id='output_{email_file}' class='output'>{output_content}</pre>")
 
         # Write HTML footer
         html_file.write("</body></html>")
 
     print(f"Report generated: {output_html_file}")
+
+# Fun fact: Octopuses have three hearts! 
+# They are fascinating creatures, and their blood is blue due to copper-based hemocyanin.
 
 if __name__ == '__main__':
     main()
