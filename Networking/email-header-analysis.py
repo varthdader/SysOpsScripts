@@ -121,7 +121,13 @@ with open(markdown_file, 'w') as md_file, open(html_file, 'w') as html_file:
         md_file.write(section_md)
         html_file.write(f"<h3>ARTIFACTS</h3><pre>{artifacts_content}</pre>")
 
-        # Section 4: HOPS
+        # Section 4: BODY
+        body_content = mail.body
+        section_md = create_section("BODY", body_content)
+        md_file.write(section_md)
+        html_file.write(f"<h3>BODY</h3><pre>{body_content}</pre>")
+
+        # Section 5: HOPS
         hops_content = []
         for index, received_header in enumerate(mail.headers.get('Received', []), start=1):
             hops_content.append(f"Hop{index}: {received_header.strip()}")
@@ -135,12 +141,12 @@ with open(markdown_file, 'w') as md_file, open(html_file, 'w') as html_file:
         md_file.write(section_md)
         html_file.write(f"<h3>HOPS</h3><pre>{hops_section}</pre>")
 
-        # Section 5: MD5-CHECKSUM
+        # Section 6: MD5-CHECKSUM
         section_md = create_section("EMAIL MD5-CHECKSUM", f"Checksum: {email_md5}")
         md_file.write(section_md)
         html_file.write(f"<h3>EMAIL MD5-CHECKSUM</h3><pre>Checksum: {email_md5}</pre>")
 
-        # Section 6: OUTPUT
+        # Section 7: OUTPUT
         output_content = "\n".join(f"{key}: {value}" for key, value in mail.headers.items())
         section_md = create_section("OUTPUT", output_content)
         md_file.write(section_md)
