@@ -143,6 +143,9 @@ def main():
                     border-top: 4px solid #000; /* Bold black separator line */
                     margin: 20px 0; /* Space above and below */
                 }
+                .report-header {
+                    font-weight: bold; /* Bold header */
+                }
             </style>
         </head>
         <body>
@@ -153,7 +156,7 @@ def main():
 
         # Process each .eml file in the specified directory
         for email_file in glob.glob(r'C:\Temp\PHISH\*.eml'):
-            html_file.write(f"<h2>Processing file: {email_file}</h2>")
+            html_file.write(f"<h2 class='report-header'>YAEA Report For:<br>{email_file}</h2>")
             mail = mailparser.parse_from_file(email_file)
             
             # Section 1: ADDRESSES
