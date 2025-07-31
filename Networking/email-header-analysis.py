@@ -146,6 +146,10 @@ def main():
                 .report-header {
                     font-weight: bold; /* Bold header */
                 }
+                .file-path {
+                    font-style: italic; /* Italic for file path */
+                    text-decoration: none; /* No underline */
+                }
             </style>
         </head>
         <body>
@@ -156,7 +160,7 @@ def main():
 
         # Process each .eml file in the specified directory
         for email_file in glob.glob(r'C:\Temp\PHISH\*.eml'):
-            html_file.write(f"<h2 class='report-header'>YAEA Report For:<br>{email_file}</h2>")
+            html_file.write(f"<h2 class='report-header'>YAEA Report For:<br><span class='file-path'>{email_file}</span></h2>")
             mail = mailparser.parse_from_file(email_file)
             
             # Section 1: ADDRESSES
